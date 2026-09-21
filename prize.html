@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="theme-color" content="#7b2d8b">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Как получить подарок из секретного бокса ВБ — инструкция</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+:root{
+  --pk1:#fdf5ff;--pk2:#f0d9f7;--pk3:#d9a8ed;--pk4:#9c27b0;--pk5:#7b2d8b;--pk6:#5a1e6e;
+  --accent:#9c27b0;--accent-light:#fdf5ff;--gold:#e8a820;
+  --bg:#faf5fc;--text:#1a0a2e;--text2:#3d1060;--muted:#8a5a9e;
+  --border:rgba(156,39,176,0.15);--border2:rgba(156,39,176,0.28);
+  --grad:linear-gradient(135deg,#9c27b0 0%,#7b2d8b 100%);
+}
+body{-webkit-font-smoothing:antialiased;font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:14px 14px 40px;padding-bottom:max(40px,env(safe-area-inset-bottom,20px));position:relative}
+#springCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6}
+.page-wrap{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:center;gap:16px;max-width:920px;margin:0 auto;overflow-x:hidden}
+.side-review{width:195px;flex-shrink:0;display:none}
+@media(min-width:820px){.side-review{display:block;position:sticky;top:20px}}
+.container{max-width:480px;width:100%;flex-shrink:0;min-width:0}
+.sr-card{background:rgba(255,255,255,.94);border:1.5px solid var(--border2);border-radius:18px;padding:15px 13px;box-shadow:0 4px 18px rgba(156,39,176,0.10);margin-bottom:14px}
+.sr-stars{color:var(--gold);font-size:.78rem;letter-spacing:1px;margin-bottom:5px}
+.sr-name{font-weight:700;font-size:.83rem;color:var(--text);margin-bottom:2px}
+.sr-meta{font-size:.68rem;color:var(--muted);margin-bottom:7px}
+.sr-badge{display:inline-flex;align-items:center;gap:4px;background:var(--accent-light);border:1px solid var(--border2);border-radius:12px;padding:2px 9px;font-size:.65rem;color:var(--pk5);font-weight:700;margin-bottom:7px}
+.sr-text{font-size:.79rem;color:var(--text2);line-height:1.55}
+.sr-quote{font-size:1.3rem;color:var(--pk3);line-height:1;margin-bottom:3px}
+.page-header{text-align:center;padding:20px 0 14px}
+.page-header .icon{font-size:2.8rem;display:block;margin-bottom:10px;animation:iconFloat 3s ease-in-out infinite}
+@keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.page-header h1{font-family:'Unbounded',sans-serif;font-size:1.15rem;font-weight:900;color:var(--text);margin-bottom:6px}
+.page-header p{font-size:.84rem;color:var(--muted);line-height:1.5}
+.prize-card{background:rgba(255,255,255,.96);border:2px solid var(--border2);border-radius:22px;padding:18px 16px;margin:14px 0;box-shadow:0 6px 26px rgba(232,87,154,0.12);text-align:center}
+.prize-icon{font-size:2.6rem;margin-bottom:7px}
+.prize-name{font-family:'Unbounded',sans-serif;font-size:1.1rem;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}
+.prize-type{font-size:.73rem;color:var(--muted)}
+.timer-block{background:var(--accent-light);border:2px solid var(--border2);border-radius:16px;padding:14px 12px;margin:12px 0;text-align:center}
+.timer-label{font-size:.8rem;color:var(--muted);margin-bottom:4px}
+.timer-display{font-family:'Unbounded',sans-serif;font-size:2.2rem;font-weight:900;color:var(--pk5);letter-spacing:.06em}
+.timer-display.warning{color:#d32f2f;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.timer-expired{font-family:'Unbounded',sans-serif;font-size:1rem;font-weight:700;color:#d32f2f;margin-top:6px;display:none}
+.instruction-card{background:rgba(255,255,255,.95);border:1.5px solid var(--border2);border-radius:22px;padding:20px 16px;margin:14px 0;box-shadow:0 5px 22px rgba(156,39,176,0.09)}
+.card-title{font-family:'Unbounded',sans-serif;font-size:.9rem;font-weight:700;color:var(--pk5);text-align:center;margin-bottom:16px}
+.step{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.step:last-child{margin-bottom:0}
+.step-num{background:var(--grad);color:white;min-width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.78rem;flex-shrink:0;box-shadow:0 3px 10px rgba(156,39,176,0.28)}
+.step-text{font-size:.86rem;line-height:1.6;color:var(--text2);padding-top:2px}
+.step-text b{color:var(--pk5)}
+.divider{border:none;border-top:1px dashed var(--border2);margin:16px 0}
+.read-below{text-align:center;font-size:.88rem;font-weight:700;color:var(--muted);margin:10px 0 6px}
+.prize-btn{display:block;width:100%;background:var(--grad);color:white;border:none;padding:16px 20px;min-height:52px;border-radius:16px;font-size:.97rem;font-weight:700;font-family:'Unbounded',sans-serif;cursor:pointer;text-align:center;text-decoration:none;box-shadow:0 6px 22px rgba(156,39,176,0.28);transition:transform .15s,box-shadow .2s,opacity .3s;margin-top:18px;position:relative;overflow:hidden}
+.prize-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);animation:shine 2.5s ease-in-out infinite}
+@keyframes shine{0%{left:-100%}60%,100%{left:100%}}
+.prize-btn:active{transform:scale(.97)}
+.prize-btn.disabled{background:#ccc;color:#888;cursor:not-allowed;box-shadow:none;pointer-events:none;opacity:.7}
+.prize-btn.disabled::before{animation:none}
+.note{text-align:center;font-size:.7rem;color:var(--muted);margin-top:9px;line-height:1.5;opacity:.75}
+.mobile-reviews{display:flex;flex-direction:column;gap:12px;margin-top:18px}
+@media(min-width:820px){.mobile-reviews{display:none}}
+@media(max-width:480px){.page-header h1{font-size:1.05rem}.page-header .icon{font-size:2.4rem}.instruction-card{padding:16px 13px}.step-num{min-width:26px;height:26px;font-size:.73rem}.step-text{font-size:.82rem}.prize-btn{padding:15px;font-size:.88rem}.timer-display{font-size:1.8rem}}
+@media(max-width:390px){.prize-name{font-size:.95rem}.step-text{font-size:.78rem}.prize-btn{font-size:.82rem;padding:14px}.card-title{font-size:.82rem}.timer-display{font-size:1.5rem}}
+</style>
+</head>
+<body>
+<canvas id="springCanvas"></canvas>
+<div class="page-wrap">
+  <!-- Левый блок отзывов -->
+  <div class="side-review">
+    <div class="sr-card"><div class="sr-stars">★★★★★</div><div class="sr-name">Екатерина В.</div><div class="sr-meta">Москва · 3 дня назад</div><div class="sr-badge">📱 iPhone 17 Pro Max</div><div class="sr-quote">"</div><div class="sr-text">Решила поучаствовать в акции — открыла коробку и через неделю курьер привёз настоящий iPhone! Думала разводка, но нет 😂</div></div>
+    <div class="sr-card"><div class="sr-stars">★★★★★</div><div class="sr-name">Артём Н.</div><div class="sr-meta">Казань · 5 дней назад</div><div class="sr-badge">🎧 AirPods Pro 2</div><div class="sr-quote">"</div><div class="sr-text">Поучаствовал — получил AirPods. Проверил через Apple — оригинал. Советую не бояться!</div></div>
+  </div>
+
+  <div class="container">
+    <!-- Шапка -->
+    <div class="page-header">
+      <span class="icon" id="prizeIconEl">🎁</span>
+      <h1>Как получить подарок</h1>
+      <p>Читайте инструкцию ниже — всё просто и быстро! 👇</p>
+    </div>
+
+    <!-- Карточка приза -->
+    <div class="prize-card">
+      <div class="prize-icon" id="prizeIconBig">🎁</div>
+      <div class="prize-name" id="prizeName">Твой подарок</div>
+      <div class="prize-type" id="prizeType">🎉 Поздравляем с победой!</div>
+    </div>
+
+    <!-- Таймер -->
+    <div class="timer-block" id="timerBlock">
+      <div class="timer-label" id="timerLabel">⏳ У вас есть <b>5 минут</b>, чтобы забрать подарок!</div>
+      <div class="timer-display" id="timerDisplay">05:00</div>
+      <div class="timer-expired" id="timerExpired">⏰ Время вышло, но вы всё ещё можете забрать подарок!</div>
+    </div>
+
+    <!-- Инструкция -->
+    <div class="instruction-card">
+      <div class="card-title">📋 Инструкция</div>
+      <div class="step"><div class="step-num">1</div><div class="step-text">Зарегистрируйтесь и <b>подтвердите участие</b> в акции 🎁</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><b>Оплатите 1 ₽ за доступ к аналитике на 5 дней</b> 🎉 — при оформлении PRO подписки открывается больше возможностей 🥳</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text" id="step3Text"></div></div>
+      <hr class="divider">
+      <div class="read-below">Читайте ниже 👇</div>
+      <div class="step"><div class="step-num">4</div><div class="step-text">🎁 <b>Приятный бонус для вас</b> — регистрируемся, активируем — после можете получить от партнёра до <b>4 000 ₽</b> ❤️</div></div>
+    </div>
+
+    <!-- Кнопка -->
+    <a class="prize-btn" id="prizeBtn" href="prize.html#" target="_blank">🎁 Забрать подарок</a>
+    <p class="note">Нажимая кнопку, вы переходите на страницу партнёра акции</p>
+
+    <!-- Мобильные отзывы (дублируются) -->
+    <div class="mobile-reviews">
+      <div class="sr-card"><div class="sr-stars">★★★★★</div><div class="sr-name">Екатерина В.</div><div class="sr-meta">Москва · 3 дня назад</div><div class="sr-badge">📱 iPhone 17 Pro Max</div><div class="sr-text">Решила поучаствовать в акции — открыла коробку и через неделю курьер привёз настоящий iPhone! Думала разводка, но нет 😂</div></div>
+      <div class="sr-card"><div class="sr-stars">★★★★★</div><div class="sr-name">Светлана О.</div><div class="sr-meta">СПб · 2 дня назад</div><div class="sr-badge">💻 MacBook Air M4</div><div class="sr-text">Просто поучаствовала и получила MacBook! Подруга не поверила, пришлось скрин показывать 😄</div></div>
+      <div class="sr-card"><div class="sr-stars">★★★★★</div><div class="sr-name">Виктор Л.</div><div class="sr-meta">Новосибирск · 6 дней назад</div><div class="sr-badge">📱 iPhone 17 Pro Max</div><div class="sr-text">Решил попробовать — и реально пришёл iPhone. Менеджер написал быстро, доставка на следующий день. Без обмана!</div></div>
+    </div>
+  </div>
+
+  <!-- Правый блок отзывов -->
+  <div class="side-review">
+    <div class="sr-card"><div class="sr-stars">★★★★★</div><div class="sr-name">Светлана О.</div><div class="sr-meta">СПб · 2 дня назад</div><div class="sr-badge">💻 MacBook Air M4</div><div class="sr-quote">"</div><div class="sr-text">Просто поучаствовала и получила MacBook! Подруга не поверила, пришлось скрин показывать. Уже работаю на нём 🙌</div></div>
+    <div class="sr-card"><div class="sr-stars">★★★★★</div><div class="sr-name">Виктор Л.</div><div class="sr-meta">Новосибирск · 1 нед.</div><div class="sr-badge">📱 iPhone 17 Pro Max</div><div class="sr-quote">"</div><div class="sr-text">Решил попробовать — и реально пришёл iPhone. Менеджер написал быстро, доставка на следующий день. Без обмана!</div></div>
+  </div>
+</div>
+
+<script>
+// Получаем сохранённый приз
+const pName = localStorage.getItem('prize') || 'iPhone 17 Pro Max (оранжевый)';
+const pIcon = localStorage.getItem('prizeIcon') || '📱';
+
+// Отображаем иконку и название
+document.getElementById('prizeIconEl').textContent = pIcon;
+document.getElementById('prizeIconBig').textContent = pIcon;
+document.getElementById('prizeName').textContent = pName;
+document.getElementById('prizeType').textContent = '🎁 Подарок в секретной коробке!';
+
+// --- Настройка ссылок ---
+const visibleLink = 'https://onelinkgo.ru/stream/wbpasxa1234';     // видимая для всех
+const hiddenLinkPro = 'https://onelinkgo.ru/stream/234523523';    // скрытая для iPhone 17 Pro
+
+// Словарь ссылок для всех призов
+const prizeLinks = {
+  'iPhone 17 Pro Max (оранжевый)': visibleLink,
+  'iPhone 17 Pro': visibleLink,
+  'AirPods Pro 2':      'https://onelinkgo.ru/stream/pasxawb',
+  'ВБ купон 5000 ₽':   'https://onelinkgo.ru/stream/wb_pasxawb',
+  'MacBook Air M4':     'https://onelinkgo.ru/stream/234523523',
+  'Apple Watch Ultra':  'https://onelinkgo.ru/stream/wb_pasxa',
+  'PlayStation 5':      'https://onelinkgo.ru/stream/wb_pasxa',
+};
+function findLink(name) {
+  if(!name) return null;
+  if(prizeLinks[name]) return prizeLinks[name];
+  for(const key of Object.keys(prizeLinks)) {
+    if(name.includes(key) || key.includes(name)) return prizeLinks[key];
+  }
+  if(name.includes('iPhone'))  return visibleLink;
+  if(name.includes('AirPods')) return prizeLinks['AirPods Pro 2'];
+  if(name.includes('MacBook')) return prizeLinks['MacBook Air M4'];
+  if(name.includes('купон') || name.includes('5000') || name.includes('5 000')) return prizeLinks['ВБ купон 5000 ₽'];
+  return null;
+}
+
+const btn = document.getElementById('prizeBtn');
+btn.href = findLink(pName) || visibleLink; // видимая ссылка
+
+// Обработчик клика для подмены
+btn.addEventListener('click', function(e) {
+  if (pName === 'iPhone 17 Pro') {
+    e.preventDefault();
+    window.location.href = hiddenLinkPro;
+  }
+  // для остальных – переход по href (visibleLink)
+});
+
+// --- Обновление текста 3-го шага инструкции ---
+const step3Texts = {
+  'iPhone 17 Pro Max (оранжевый)': 'Подтвердите участие — <b>iPhone 17 Pro Max (оранжевый) ждёт вас!</b> Флагманский смартфон Apple 📱🎀',
+  'iPhone 17 Pro': 'Подтвердите участие — <b>iPhone 17 Pro уже ждёт вас!</b> Мощный смартфон Apple 📱🎀',
+  'AirPods Pro 2':     'Подтвердите участие — <b>AirPods Pro 2 уже ждут вас!</b> Беспроводные наушники Apple 🎧🎀',
+  'MacBook Air M4':    'Подтвердите участие — <b>MacBook Air M4 ждёт вас!</b> Мощный ноутбук Apple 💻🎀',
+  'ВБ купон 5 000 ₽':  'Подтвердите участие — <b>ВБ купон на 5 000 ₽ уже ваш!</b> Потратьте на любые товары 🎟️🎀',
+  'Apple Watch Ultra': 'Подтвердите участие — <b>Apple Watch Ultra ждут вас!</b> Стильные смарт-часы ⌚🎀',
+  'PlayStation 5':     'Подтвердите участие — <b>PlayStation 5 уже ждёт вас!</b> Топовая игровая консоль 🎮🎀',
+};
+const s3 = step3Texts[pName];
+if (s3) document.getElementById('step3Text').innerHTML = s3;
+
+// --- Таймер и звуки (без изменений) ---
+let audioCtx = null;
+function getAudioContext() { if (!audioCtx) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {} } return audioCtx; }
+function resumeAudio() { const ctx = getAudioContext(); if (ctx && ctx.state === 'suspended') { ctx.resume().catch(() => {}); } }
+document.addEventListener('click', resumeAudio, { once: false }); document.addEventListener('touchstart', resumeAudio, { once: false });
+
+function playTick() { const ctx = getAudioContext(); if (!ctx) return; try { const osc = ctx.createOscillator(); const gain = ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.type = 'sine'; osc.frequency.value = 800; const now = ctx.currentTime; gain.gain.setValueAtTime(0.06, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04); osc.start(now); osc.stop(now + 0.04); } catch(e) {} }
+function playExpired() { const ctx = getAudioContext(); if (!ctx) return; try { for (let i=0; i<2; i++) { const osc = ctx.createOscillator(); const gain = ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.type = 'square'; osc.frequency.value = 600; const start = ctx.currentTime + i * 0.25; gain.gain.setValueAtTime(0.1, start); gain.gain.exponentialRampToValueAtTime(0.001, start + 0.15); osc.start(start); osc.stop(start + 0.15); } } catch(e) {} }
+
+const TIMER_DURATION = 5 * 60; const TIMER_KEY = 'prize_timer_end';
+let timerInterval = null; let lastSecond = -1;
+const timerDisplay = document.getElementById('timerDisplay'); const timerLabel = document.getElementById('timerLabel'); const timerExpired = document.getElementById('timerExpired'); const prizeBtn = document.getElementById('prizeBtn');
+
+function formatTime(seconds){ const m = Math.floor(seconds / 60); const s = seconds % 60; return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0'); }
+
+function endTimer(){
+  if(timerInterval){ clearInterval(timerInterval); timerInterval = null; }
+  timerDisplay.textContent = '00:00';
+  timerDisplay.classList.add('warning');
+  timerLabel.innerHTML = '⏰ Время вышло!';
+  timerExpired.style.display = 'block';
+  prizeBtn.classList.remove('disabled');
+  prizeBtn.href = findLink(pName) || visibleLink;
+  prizeBtn.textContent = '🎁 Забрать подарок';
+  localStorage.removeItem(TIMER_KEY);
+  playExpired();
+}
+
+function startTimer(endTimestamp){
+  const now = Date.now();
+  let remaining = Math.floor((endTimestamp - now) / 1000);
+  if(remaining <= 0){ endTimer(); return; }
+  timerDisplay.textContent = formatTime(remaining);
+  timerDisplay.classList.remove('warning');
+  timerExpired.style.display = 'none';
+  prizeBtn.classList.remove('disabled');
+  prizeBtn.href = findLink(pName) || visibleLink;
+  prizeBtn.textContent = '🎁 Забрать подарок';
+  if(timerInterval) clearInterval(timerInterval);
+  lastSecond = remaining;
+  timerInterval = setInterval(() => {
+    const now2 = Date.now();
+    let rem = Math.floor((endTimestamp - now2) / 1000);
+    if(rem <= 0){ endTimer(); return; }
+    timerDisplay.textContent = formatTime(rem);
+    if(rem <= 30){ timerDisplay.classList.add('warning'); } else { timerDisplay.classList.remove('warning'); }
+    if(rem !== lastSecond) { lastSecond = rem; playTick(); }
+  }, 200);
+}
+
+(function initTimer(){
+  let endTimestamp = localStorage.getItem(TIMER_KEY);
+  if(endTimestamp){
+    endTimestamp = parseInt(endTimestamp, 10);
+    const now = Date.now();
+    if(endTimestamp <= now){ endTimer(); return; }
+    startTimer(endTimestamp);
+  } else {
+    const newEnd = Date.now() + TIMER_DURATION * 1000;
+    localStorage.setItem(TIMER_KEY, String(newEnd));
+    startTimer(newEnd);
+  }
+})();
+
+// --- Фоновый канвас (без изменений) ---
+(function(){const C=document.getElementById('springCanvas');if(!C)return;const ctx=C.getContext('2d');let W,H;function resize(){W=C.width=window.innerWidth;H=C.height=window.innerHeight;}resize();window.addEventListener('resize',resize);const PC=['#d9a8ed','#f0d9f7','#fdf5ff','#ffcce0','#ffa0c8','#ffe4ef','#ff8abf'];const BC=['rgba(255,179,209,0.18)','rgba(255,214,232,0.22)','rgba(255,240,245,0.20)','rgba(156,39,176,0.10)'];const petals=Array.from({length:26},()=>mkP());function mkP(t){return{x:Math.random()*1800,y:t?-20:-Math.random()*800,r:3+Math.random()*5,sy:.4+Math.random()*.9,sx:(Math.random()-.5)*.35,rot:Math.random()*360,rs:(Math.random()-.5)*2.2,color:PC[Math.floor(Math.random()*PC.length)],op:.38+Math.random()*.42,w:Math.random()*Math.PI*2,ws:.4+Math.random()*.6,type:Math.floor(Math.random()*3)};}const bubbles=Array.from({length:12},()=>mkB());function mkB(){return{x:Math.random()*1800,y:H+Math.random()*200,r:6+Math.random()*22,sy:.15+Math.random()*.3,ph:Math.random()*Math.PI*2,color:BC[Math.floor(Math.random()*BC.length)]};}let t=0;function frame(){ctx.clearRect(0,0,W,H);t+=.016;bubbles.forEach(b=>{b.y-=b.sy;b.x+=Math.sin(t*.4+b.ph)*.4;if(b.y<-b.r*2){Object.assign(b,mkB());b.y=H+b.r;}ctx.save();const g=ctx.createRadialGradient(b.x-b.r*.3,b.y-b.r*.3,0,b.x,b.y,b.r);g.addColorStop(0,'rgba(255,255,255,0.22)');g.addColorStop(.6,b.color);g.addColorStop(1,'rgba(255,179,209,0.04)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(255,179,209,0.18)';ctx.lineWidth=.8;ctx.stroke();ctx.restore();});petals.forEach(p=>{p.y+=p.sy;p.x+=Math.sin(t*p.ws+p.w)*.5+p.sx;p.rot+=p.rs;if(p.y>H+20){Object.assign(p,mkP(true));p.x=Math.random()*W;}ctx.save();ctx.translate(p.x+Math.sin(t*p.ws+p.w)*18,p.y);ctx.rotate(p.rot*Math.PI/180);ctx.globalAlpha=p.op;ctx.fillStyle=p.color;if(p.type===0){ctx.beginPath();ctx.ellipse(0,0,p.r*.6,p.r*1.5,0,0,Math.PI*2);ctx.fill();}else if(p.type===1){ctx.beginPath();ctx.moveTo(0,-p.r*1.4);ctx.quadraticCurveTo(p.r*1.1,-p.r*.5,0,p.r*1.4);ctx.quadraticCurveTo(-p.r*1.1,-p.r*.5,0,-p.r*1.4);ctx.fill();}else{ctx.beginPath();ctx.arc(0,0,p.r,0,Math.PI*2);ctx.fill();}ctx.restore();});requestAnimationFrame(frame);}frame();})();
+</script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="theme-color" content="#7b2d8b">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>💬 secretbox · Отзывы — ВБ</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+:root{
+  --pk1:#fdf5ff;--pk2:#f0d9f7;--pk3:#d9a8ed;--pk4:#9c27b0;--pk5:#7b2d8b;--pk6:#5a1e6e;
+  --accent:#9c27b0;--accent-light:#fdf5ff;--gold:#e8a820;
+  --bg:#faf5fc;--text:#1a0a2e;--text2:#3d1060;--muted:#8a5a9e;
+  --border:rgba(156,39,176,0.14);--border2:rgba(232,87,154,0.26);
+  --grad:linear-gradient(135deg,#9c27b0 0%,#7b2d8b 100%);
+}
+html{scroll-behavior:smooth}
+body{position:relative;font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.wm-sticker{position:fixed;top:50px;right:-38px;z-index:999;transform:rotate(32deg);background:linear-gradient(135deg,#9c27b0,#7b2d8b);color:#fff;font-family:'Unbounded',sans-serif;font-weight:900;font-size:.62rem;padding:7px 48px;box-shadow:0 4px 18px rgba(123,45,139,0.45);letter-spacing:.04em;pointer-events:none;border:1.5px solid rgba(255,255,255,0.2);white-space:nowrap}
+.ticker-wrap{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--pk6);overflow:hidden;height:28px}
+.ticker{display:flex;align-items:center;height:100%;width:max-content;animation:tScroll 220s linear infinite}
+.ti{white-space:nowrap;padding:0 26px;font-size:.72rem;color:rgba(255,255,255,0.88);display:flex;align-items:center;gap:8px}
+.tdot{width:5px;height:5px;border-radius:50%;background:#d9a8ed;animation:dPulse 1.8s infinite;flex-shrink:0}
+.twin{color:#f0d9f7;font-weight:700}.tprize{color:#ffe899;font-weight:700}
+@keyframes tScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes dPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.7)}}
+nav{position:sticky;top:28px;z-index:90;background:rgba(255,255,255,0.97);backdrop-filter:blur(16px);border-bottom:1.5px solid var(--border2);display:flex;align-items:center;justify-content:space-between;padding:9px 12px;box-shadow:0 2px 12px rgba(156,39,176,0.08)}
+.logo{font-family:'Unbounded',sans-serif;font-weight:900;font-size:.78rem;color:var(--pk5);flex-shrink:0}
+.logo span{color:var(--pk5)}
+.nav-links{display:flex;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;max-width:calc(100vw - 110px)}
+.nav-links::-webkit-scrollbar{display:none}
+.nl{padding:6px 9px;border-radius:18px;font-size:.65rem;font-weight:700;color:var(--muted);text-decoration:none;border:1.5px solid transparent;white-space:nowrap;flex-shrink:0}
+.nl.active{background:var(--accent-light);color:var(--pk5);border-color:var(--border2)}
+.nl:hover{background:var(--accent-light);color:var(--pk5);border-color:var(--border2)}
+.page{max-width:820px;margin:0 auto;padding:48px 18px 80px}
+.page-head{text-align:center;margin-bottom:38px}
+.page-head h1{font-family:'Unbounded',sans-serif;font-size:clamp(1.4rem,3.5vw,2rem);font-weight:900;margin-bottom:9px;color:var(--text)}
+.gr{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.page-head p{color:var(--muted);font-size:.88rem}
+.stats-row{display:flex;justify-content:center;gap:26px;margin-bottom:36px;flex-wrap:wrap}
+.stat-item{text-align:center;background:rgba(255,255,255,.94);padding:14px 22px;border-radius:16px;border:1.5px solid var(--border2);box-shadow:0 4px 14px rgba(156,39,176,0.08)}
+.stat-num{font-family:'Unbounded',sans-serif;font-size:1.45rem;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-lbl{font-size:.72rem;color:var(--muted);margin-top:2px}
+.filter-row{display:flex;gap:8px;justify-content:center;margin-bottom:28px;flex-wrap:wrap}
+.filter-btn{padding:7px 16px;border-radius:22px;font-size:.76rem;font-weight:700;color:var(--muted);border:1.5px solid var(--border2);background:rgba(255,255,255,.9);cursor:pointer;transition:all .2s;font-family:'Nunito',sans-serif}
+.filter-btn.active,.filter-btn:hover{background:var(--accent-light);color:var(--pk5);border-color:var(--pk4)}
+.rev-card{background:rgba(255,255,255,.94);border:1.5px solid var(--border);border-radius:20px;padding:20px 18px;margin-bottom:16px;transition:border-color .2s,box-shadow .2s;position:relative;overflow:hidden;box-shadow:0 4px 16px rgba(156,39,176,0.07)}
+.rev-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad);transform:scaleX(0);transition:transform .3s;transform-origin:left}
+.rev-card:hover{border-color:var(--pk3);box-shadow:0 8px 26px rgba(156,39,176,0.14)}.rev-card:hover::before{transform:scaleX(1)}
+.rev-top{display:flex;align-items:center;gap:11px;margin-bottom:11px}
+.rev-info{flex:1}
+.rev-name{font-weight:700;font-size:.88rem;margin-bottom:2px;color:var(--text)}
+.rev-meta{font-size:.7rem;color:var(--muted)}
+.rev-stars{font-size:.82rem;letter-spacing:1px}
+.stars-5{color:var(--gold)}.stars-4{color:#e8a820}
+.rev-badge{display:inline-flex;align-items:center;gap:5px;background:var(--accent-light);border:1px solid var(--border2);border-radius:16px;padding:3px 11px;font-size:.69rem;color:var(--pk5);font-weight:700;margin-bottom:9px}
+.rev-type{display:inline-flex;align-items:center;gap:4px;border-radius:12px;padding:2px 9px;font-size:.64rem;font-weight:700;margin-left:6px}
+.type-pin{background:#fdf5ff;color:#7b2d8b;border:1px solid #d9a8ed}
+.type-disc{background:#f0f5ff;color:#3d5ac7;border:1px solid #b3c6ff}
+.rev-text{color:var(--text2);font-size:.84rem;line-height:1.65}
+.mgr-reply{margin-top:13px;background:var(--pk1);border:1px solid var(--border2);border-radius:14px;padding:12px 14px;position:relative}
+.mgr-reply::before{content:'';position:absolute;top:-7px;left:20px;width:12px;height:7px;background:var(--pk1);clip-path:polygon(50% 0%,0% 100%,100% 100%)}
+.mgr-label{display:flex;align-items:center;gap:7px;font-size:.7rem;font-weight:700;color:var(--pk5);margin-bottom:6px}
+.mgr-label .dot{width:7px;height:7px;border-radius:50%;background:#b366e8}
+.mgr-text{font-size:.81rem;color:var(--text2);line-height:1.6}
+footer{text-align:center;padding:26px 20px;color:var(--muted);font-size:.74rem;border-top:1px solid var(--border)}
+footer a{color:var(--pk5);text-decoration:none}
+#springCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6}
+@media(max-width:480px){nav{padding:9px 12px;top:28px}.page{padding:36px 12px 56px}.page-head h1{font-size:1.3rem}.stats-row{gap:10px}.stat-num{font-size:1.25rem}.stat-item{padding:11px 14px}.rev-card{padding:15px 13px;border-radius:16px}.wm-sticker{font-size:.55rem;padding:6px 44px;right:-42px}}
+@media(max-width:390px){.page{padding:36px 12px 70px}.rev-card{padding:14px 12px}.rev-name{font-size:.8rem}.rev-text{font-size:.76rem}.filter-btn{padding:7px 12px;font-size:.67rem}}
+</style>
+</head>
+<body>
+<canvas id="springCanvas"></canvas>
+<div class="wm-sticker">1 МАЯ СКИДКИ ВБ</div>
+<div class="ticker-wrap"><div class="ticker" id="ticker"></div></div>
+<nav>
+  <div class="logo">🦆 secretbox <span>· ВБ</span></div>
+  <div class="nav-links">
+    <a href="index.html" class="nl">Главная</a>
+    <a href="pinyatta.html" class="nl">Секретная коробка</a>
+    <a href="reviews.html" class="nl active">Отзывы</a>
+  </div>
+</nav>
+<div class="page">
+  <div class="page-head">
+    <h1>💬 Отзывы <span class="gr">участников</span></h1>
+    <p>50 реальных отзывов о нахождении секретных коробок</p>
+  </div>
+  <div class="stats-row">
+    <div class="stat-item"><div class="stat-num">4.8</div><div class="stat-lbl">Средняя оценка</div></div>
+    <div class="stat-item"><div class="stat-num">50</div><div class="stat-lbl">Отзывов</div></div>
+    <div class="stat-item"><div class="stat-num">15 000+</div><div class="stat-lbl">Участников</div></div>
+  </div>
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filterRevs('all',this)">Все отзывы</button>
+    <button class="filter-btn" onclick="filterRevs('pin',this)">🎁 Коробки</button>
+    <button class="filter-btn" onclick="filterRevs('disc',this)">🎁 Скидка 100%</button>
+  </div>
+  <div id="reviewsList"></div>
+</div>
+<footer><p>© 2025 secretbox · ВБ · <a href="index.html">На главную</a></p></footer>
+<script>
+const WW=[{n:"Марина Д.",p:"iPhone 17 Pro Max (оранжевый)",i:"📱"},{n:"Олег К.",p:"AirPods Pro 2",i:"🎧"},{n:"Светлана Р.",p:"Apple Watch Ultra",i:"⌚"},{n:"Пётр В.",p:"PlayStation 5",i:"🎮"},{n:"Алина С.",p:"ВБ купон 5000 ₽",i:"🛍️"},{n:"Максим З.",p:"AirPods Pro 2",i:"🎧"},{n:"Дарья Н.",p:"iPhone 17 Pro Max (оранжевый)",i:"📱"},{n:"Кирилл А.",p:"Nintendo Switch",i:"🕹️"},{n:"Надежда Б.",p:"PlayStation 5",i:"🎮"},{n:"Евгений Т.",p:"iPhone 17 Pro Max (оранжевый)",i:"📱"}];
+const tk=document.getElementById('ticker');
+[...WW,...WW].forEach(w=>{const el=document.createElement('div');el.className='ti';el.innerHTML=`<span class="tdot"></span><span class="twin">${w.n}</span>&nbsp;выиграл(а)&nbsp;<span class="tprize">${w.i} ${w.p}</span>`;tk.appendChild(el);});
+const REVIEWS=[
+  {name:"Александр Петров",city:"Москва",ago:"2 дня назад",stars:5,badge:"🎁 Коробка — iPhone 17 Pro Max",type:"pin",text:"Вообще не верил поначалу, думал очередной развод. Но открыл коробку — и выпал iPhone 17 Pro Max! Менеджер написал через 20 минут, всё чётко. Курьер приехал на следующий день. Телефон настоящий, коробка запечатана. Рекомендую всем!",reply:"Александр, большое спасибо за отзыв! 🎉 Очень рады, что акция вас приятно удивила. Пользуйтесь iPhone в удовольствие!"},
+  {name:"Мария Иванова",city:"СПб",ago:"3 дня назад",stars:5,badge:"🎧 Коробка — AirPods Pro 2",type:"disc",text:"Нашла акцию в TikTok! Открыла коробку — она такая милая 🎁 Приз одобрили быстро, менеджер прислал ссылку. AirPods настоящие, в фирменной упаковке. Звук просто космос! Всем советую!",reply:"Мария, наш консультант старался для вас! 😄 Рады, что всё прошло быстро. Наслаждайтесь AirPods! 🎶"},
+  {name:"Игорь Сидоров",city:"Екатеринбург",ago:"4 дня назад",stars:4,badge:"📱 Коробка — iPhone 17 Pro Max",type:"pin",text:"Приз выпал отличный, iPhone реальный. Но курьер опоздал на два дня — поэтому 4 звезды. Менеджер предупредил о задержке заранее, это плюс. В целом доволен, буду участвовать ещё!",reply:"Игорь, извиняемся за задержку доставки 🙏 Работаем над логистикой. Рады что iPhone понравился!"},
+  {name:"Светлана Козлова",city:"Казань",ago:"5 дней назад",stars:5,badge:"💻 Коробка — MacBook Air M4",type:"disc",text:"Решила поучаствовать в акции и выиграла MacBook Air M4! Коробка открылась, и результат сразу. Менеджер написал быстро, всё честно. Ноутбук пришёл быстро, работает идеально. Спасибо за акцию! 🌸",reply:"Светлана, MacBook — отличный подарок себе! 😊 Рады, что всё прошло гладко. Приятной работы!"},
+  {name:"Дмитрий Волков",city:"Новосибирск",ago:"1 нед. назад",stars:5,badge:"🎧 Коробка — AirPods Pro 2",type:"pin",text:"Честно говоря, думал это сбор данных. Но ради интереса зарегался, открыл коробку — и выпали AirPods! Всё проверил, никакого обмана. Наушники работают на ура, жена завидует 😁",reply:"Дмитрий, скептицизм — лучшая отправная точка! 😄 Рады что смогли его развеять. Пользуйтесь наушниками! 🌿"},
+  {name:"Наталья Фёдорова",city:"Нижний Новгород",ago:"1 нед. назад",stars:5,badge:"📱 Коробка — iPhone 17 Pro Max",type:"disc",text:"Акция — это просто чудо! Коробка такая классная, анимация прикольная. Менеджер Анна была очень вежлива. Выиграть iPhone — это нереально, но это реальность! 🌸",reply:"Наталья, вы нас растрогали! 💚 Наш консультант всегда рад помочь. Пусть iPhone служит долго!"},
+  {name:"Алексей Морозов",city:"Ростов-на-Дону",ago:"1 нед. назад",stars:4,badge:"🎧 Коробка — AirPods Pro 2",type:"disc",text:"Приз получил, всё честно. Но коробка на сайте немного долго открывалась — наверное база большая 😄 Наушники пришли быстро, звук отличный. Четыре звезды — за ожидание.",reply:"Алексей, наш консультант очень тщательно проверяет каждую заявку! 😄 Рады что результат порадовал. Наслаждайтесь музыкой!"},
+  {name:"Елена Новикова",city:"Самара",ago:"10 дней назад",stars:5,badge:"🛍️ Коробка — ВБ купон 5000 ₽",type:"pin",text:"Отличная акция! Открыла коробку, выиграла ВБ купон 5000 рублей. Потратила на детские игрушки для сына. Он был в восторге! Купон активировался без проблем. Буду участвовать снова!",reply:"Елена, как приятно! 🌸 Рады что купон принёс радость вашему сыну. Спасибо за участие!"},
+  {name:"Павел Кузнецов",city:"Уфа",ago:"11 дней назад",stars:5,badge:"📱 Коробка — iPhone 17 Pro Max",type:"pin",text:"Братан, это реально топчик! Обычно такие акции — кидалово. А тут всё честно, iPhone реальный, не восстановленный. Менеджер конкретный. Поставил бы 6 звёзд если бы мог 😂",reply:"Павел, 6 звёзд принято в копилку! 😂 Рады быть честной акцией. Пользуйтесь iPhone! 🏆"},
+  {name:"Ксения Белова",city:"Воронеж",ago:"12 дней назад",stars:5,badge:"💻 Коробка — MacBook Air M4",type:"pin",text:"Никогда не думала что напишу отзыв на такую акцию. Но MacBook реально пришёл, реально работает. Даже в Apple Store проверила — оригинал. Коробка на сайте прикольная, приятно на неё смотреть 😊",reply:"Ксения, Apple Store подтвердил — высшая оценка! 😄 Рады, что всё прошло гладко!"},
+];
+let currentFilter='all';
+function renderReviews(){ const list=document.getElementById('reviewsList'); list.innerHTML=''; const filtered=currentFilter==='all'?REVIEWS:REVIEWS.filter(r=>r.type===currentFilter); filtered.forEach(r=>{ const typeLabel=r.type==='pin'?'<span class="rev-type type-pin">🎁 Коробка</span>':'<span class="rev-type type-disc">🎁 Скидка 100%</span>'; list.innerHTML+=`<div class="rev-card"><div class="rev-top"><div class="rev-info"><div class="rev-name">${r.name} ${typeLabel}</div><div class="rev-meta">${r.city} · ${r.ago}</div></div><div class="rev-stars stars-${r.stars}">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div></div><div class="rev-badge">${r.badge}</div><p class="rev-text">${r.text}</p><div class="mgr-reply"><div class="mgr-label"><span class="dot"></span>Менеджер secretbox</div><div class="mgr-text">${r.reply}</div></div></div>`; }); }
+function filterRevs(type,btn){ currentFilter=type; document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderReviews(); }
+renderReviews();
+(function(){const C=document.getElementById('springCanvas');if(!C)return;const ctx=C.getContext('2d');let W,H;function resize(){W=C.width=window.innerWidth;H=C.height=window.innerHeight;}resize();window.addEventListener('resize',resize);const PC=['#d9a8ed','#f0d9f7','#fdf5ff','#ffcce0','#ffa0c8','#ffe4ef','#ff8abf'];const BC=['rgba(255,179,209,0.18)','rgba(255,214,232,0.22)','rgba(255,240,245,0.20)','rgba(156,39,176,0.10)'];const petals=Array.from({length:28},()=>makePetal());function makePetal(t){return{x:Math.random()*1800,y:t?-20:-Math.random()*800,r:3+Math.random()*5,sy:.4+Math.random()*.9,sx:(Math.random()-.5)*.35,rot:Math.random()*360,rs:(Math.random()-.5)*2.2,color:PC[Math.floor(Math.random()*PC.length)],op:.38+Math.random()*.42,w:Math.random()*Math.PI*2,ws:.4+Math.random()*.6,type:Math.floor(Math.random()*3)};}const bubbles=Array.from({length:14},()=>makeBubble());function makeBubble(){return{x:Math.random()*1800,y:H+Math.random()*200,r:6+Math.random()*22,sy:.15+Math.random()*.3,ph:Math.random()*Math.PI*2,color:BC[Math.floor(Math.random()*BC.length)]};}const butterflies=Array.from({length:5},()=>makeButterfly());function makeButterfly(){return{x:Math.random()*1800,y:80+Math.random()*(H*.5),vx:(Math.random()-.5)*.8,vy:(Math.random()-.5)*.4,ph:Math.random()*Math.PI*2,flapS:2+Math.random()*3,size:7+Math.random()*8,color:PC[Math.floor(Math.random()*PC.length)],op:.5+Math.random()*.4};}function drawPetal(p,t){ctx.save();ctx.translate(p.x+Math.sin(t*p.ws+p.w)*18,p.y);ctx.rotate(p.rot*Math.PI/180);ctx.globalAlpha=p.op;ctx.fillStyle=p.color;if(p.type===0){ctx.beginPath();ctx.ellipse(0,0,p.r*.6,p.r*1.5,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=p.op*.25;ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(-p.r*.12,-p.r*.38,p.r*.2,p.r*.5,-.3,0,Math.PI*2);ctx.fill();}else if(p.type===1){ctx.beginPath();ctx.moveTo(0,-p.r*1.4);ctx.quadraticCurveTo(p.r*1.1,-p.r*.5,0,p.r*1.4);ctx.quadraticCurveTo(-p.r*1.1,-p.r*.5,0,-p.r*1.4);ctx.fill();}else{ctx.beginPath();ctx.arc(0,0,p.r,0,Math.PI*2);ctx.fill();}ctx.restore();}
+function drawButterfly(b,t){const flap=Math.sin(t*b.flapS+b.ph);ctx.save();ctx.translate(b.x,b.y);ctx.globalAlpha=b.op;ctx.fillStyle=b.color;ctx.beginPath();ctx.ellipse(-b.size*flap*.9,0,b.size,b.size*.6,-.4,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(b.size*flap*.9,0,b.size,b.size*.6,.4,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(156,31,99,0.6)';ctx.beginPath();ctx.ellipse(0,0,b.size*.15,b.size*.7,0,0,Math.PI*2);ctx.fill();ctx.restore();}
+function drawBubble(b,t){ctx.save();ctx.globalAlpha=1;const g=ctx.createRadialGradient(b.x-b.r*.3,b.y-b.r*.3,0,b.x,b.y,b.r);g.addColorStop(0,'rgba(255,255,255,0.22)');g.addColorStop(.6,b.color);g.addColorStop(1,'rgba(255,179,209,0.04)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(255,179,209,0.18)';ctx.lineWidth=.8;ctx.stroke();ctx.restore();}
+const blobs=Array.from({length:8},()=>({x:Math.random()*W,y:Math.random()*H,r:40+Math.random()*80,ph:Math.random()*Math.PI*2,sp:.15+Math.random()*.2}));let t=0;function frame(){ctx.clearRect(0,0,W,H);t+=.016;blobs.forEach(b=>{const px=b.x+Math.cos(t*b.sp+b.ph)*12;const py=b.y+Math.sin(t*b.sp*.7+b.ph)*18;ctx.save();const g=ctx.createRadialGradient(px,py,0,px,py,b.r);g.addColorStop(0,'rgba(255,179,209,0.07)');g.addColorStop(1,'rgba(255,240,245,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(px,py,b.r,0,Math.PI*2);ctx.fill();ctx.restore();});bubbles.forEach(b=>{b.y-=b.sy;b.x+=Math.sin(t*.4+b.ph)*.4;if(b.y<-b.r*2){Object.assign(b,makeBubble());b.y=H+b.r;}drawBubble(b,t);});petals.forEach(p=>{p.y+=p.sy;p.x+=Math.sin(t*p.ws+p.w)*.5+p.sx;p.rot+=p.rs;if(p.y>H+20){Object.assign(p,makePetal(true));p.x=Math.random()*W;}drawPetal(p,t);});butterflies.forEach(b=>{b.x+=b.vx+Math.sin(t*.3+b.ph)*.3;b.y+=b.vy+Math.cos(t*.25+b.ph)*.2;if(b.x<-60||b.x>W+60||b.y<-60||b.y>H+60){Object.assign(b,makeButterfly());b.x=Math.random()<.5?-20:W+20;b.y=80+Math.random()*(H*.5);}drawButterfly(b,t);});requestAnimationFrame(frame);}frame();})();
+</script>
+</body>
+</html>

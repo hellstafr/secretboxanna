@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#7b2d8b">
+<title>secretbox · ВБ — Открой коробку и выиграй приз</title>
+<meta name="description" content="Уже 15 000+ участников! Открой secret box и попробуй выиграть главный приз. Участвуй бесплатно — открой одну из шести коробок и попробуй выиграть iPhone 17 Pro, Pro Max и другие подарки от ВБ.">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
+:root{
+  --pk1:#fdf5ff;--pk2:#f0d9f7;--pk3:#d9a8ed;--pk4:#9c27b0;--pk5:#7b2d8b;--pk6:#5a1e6e;
+  --accent:#9c27b0;--accent-light:#fdf5ff;--gold:#ffd700;
+  --bg:#faf5fc;--text:#1a0a2e;--text2:#3d1060;--muted:#8a5a9e;
+  --border:rgba(156,39,176,0.15);--border2:rgba(156,39,176,0.28);
+  --shadow:0 4px 24px rgba(156,39,176,0.10);
+  --grad:linear-gradient(135deg,#9c27b0 0%,#7b2d8b 100%);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.ticker-wrap{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--pk6);overflow:hidden;height:26px}
+.ticker{display:flex;align-items:center;height:100%;width:max-content;animation:tScroll 160s linear infinite}
+.ti{white-space:nowrap;padding:0 16px;font-size:.62rem;color:rgba(255,255,255,0.88);display:flex;align-items:center;gap:6px}
+.tdot{width:4px;height:4px;border-radius:50%;background:var(--pk3);animation:dPulse 1.8s infinite;flex-shrink:0}
+.twin{color:var(--pk2);font-weight:700}.tprize{color:var(--gold);font-weight:700}
+.ti-jackpot{background:linear-gradient(90deg,rgba(255,215,0,.18),rgba(156,39,176,.12))}
+.tjackpot-badge{display:inline-flex;align-items:center;background:linear-gradient(135deg,#ffd700,#f5a623);color:#3d1060;font-family:'Unbounded',sans-serif;font-size:.62rem;font-weight:900;padding:0 7px;border-radius:0;letter-spacing:.04em;margin-right:5px;height:26px;white-space:nowrap}
+.tprize-jackpot{color:#ffd700 !important;font-weight:900 !important;text-shadow:0 0 8px rgba(255,215,0,.6)}
+@keyframes tScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes dPulse{0%,100%{opacity:1}50%{opacity:.2}}
+nav{position:sticky;top:26px;z-index:90;background:rgba(255,255,255,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;padding:10px 14px;box-shadow:0 2px 10px rgba(156,39,176,0.07)}
+.logo{font-family:'Unbounded',sans-serif;font-weight:900;font-size:.8rem;color:var(--pk5);flex-shrink:0;white-space:nowrap}
+.logo span{color:var(--pk5)}
+.nav-links{display:flex;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-left:6px}
+.nav-links::-webkit-scrollbar{display:none}
+.nl{padding:6px 10px;border-radius:16px;font-size:.66rem;font-weight:700;color:var(--muted);text-decoration:none;border:1.5px solid transparent;white-space:nowrap;flex-shrink:0}
+.nl.active{background:var(--accent-light);color:var(--pk5);border-color:var(--border2)}
+.hero{position:relative;z-index:1;text-align:center;padding:24px 16px 16px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap}
+.hero .logo-side{flex:0 0 80px;display:flex;justify-content:center;align-items:center;pointer-events:none}
+.hero .logo-side .box-icon{font-size:4rem;filter:drop-shadow(0 4px 12px rgba(156,39,176,0.3));animation:floatBox 3s ease-in-out infinite}
+@keyframes floatBox{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-8px) rotate(3deg)}}
+.hero .hero-center{flex:1;min-width:200px;padding:0 10px}
+.badge{display:inline-flex;align-items:center;gap:5px;background:var(--accent-light);border:1.5px solid var(--border2);border-radius:22px;padding:5px 12px;font-size:.67rem;color:var(--pk5);margin-bottom:12px;font-weight:800}
+.hero h1{font-family:'Unbounded',sans-serif;font-size:1.45rem;font-weight:900;line-height:1.2;margin-bottom:9px;color:var(--text)}
+.gr{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:.82rem;color:var(--muted);line-height:1.65;padding:0 8px}
+@media(max-width:600px){.hero .logo-side{flex:0 0 50px}.hero .logo-side .box-icon{font-size:2.8rem}}
+@media(max-width:400px){.hero .logo-side{display:none}}
+.form-sec{position:relative;z-index:1;padding:12px 14px 24px}
+.form-card{background:#fff;border:1.5px solid var(--border2);border-radius:20px;padding:20px 15px;box-shadow:0 6px 32px rgba(156,39,176,0.11)}
+.ft{font-family:'Unbounded',sans-serif;font-size:.88rem;font-weight:700;margin-bottom:3px;text-align:center;color:var(--text)}
+.fs{color:var(--muted);font-size:.75rem;text-align:center;margin-bottom:16px}
+.fg{margin-bottom:11px}
+label{display:block;font-size:.64rem;font-weight:800;color:var(--muted);margin-bottom:4px;letter-spacing:.04em;text-transform:uppercase}
+input,select{width:100%;padding:13px 13px;background:var(--pk1);border:1.5px solid var(--border2);border-radius:11px;color:var(--text);font-family:'Nunito',sans-serif;font-size:16px;outline:none;transition:border .2s,background .2s;-webkit-appearance:none;appearance:none}
+input::placeholder{color:rgba(138,90,158,0.4);font-size:.88rem}
+input:focus,select:focus{border-color:var(--pk4);background:#fff;box-shadow:0 0 0 3px rgba(156,39,176,0.09)}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23b06090' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:36px}
+select option{background:#fff;color:var(--text)}
+.btn-sub{width:100%;padding:15px;background:var(--grad);border:none;border-radius:13px;color:white;font-family:'Unbounded',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;margin-top:6px;box-shadow:0 5px 20px rgba(156,39,176,0.28);-webkit-appearance:none;touch-action:manipulation;letter-spacing:.01em}
+.btn-sub:active{transform:scale(.97)}
+.succ{display:none;text-align:center;padding:6px 0}
+.succ .se{font-size:2.6rem;margin-bottom:8px;display:block}
+.succ h3{font-family:'Unbounded',sans-serif;font-size:.9rem;margin-bottom:4px;color:var(--text)}
+.succ p{color:var(--muted);font-size:.76rem;margin-bottom:16px}
+.choice-row{display:flex;justify-content:center;gap:10px}
+.choice-btn{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 26px;border:2px solid var(--border2);border-radius:16px;background:var(--pk1);text-decoration:none;font-family:'Unbounded',sans-serif;font-weight:700;font-size:.75rem;color:var(--pk5);line-height:1.35;text-align:center;touch-action:manipulation}
+.choice-btn:active{transform:scale(.95)}
+.choice-btn .ci{font-size:2.2rem}
+.prizes-sec{position:relative;z-index:1;padding:20px 14px 30px}
+.sl{font-family:'Unbounded',sans-serif;font-size:1rem;font-weight:700;margin-bottom:4px;color:var(--text);text-align:center}
+.ss{color:var(--muted);font-size:.77rem;text-align:center;margin-bottom:16px}
+.prizes-grid{display:grid;grid-template-columns:1fr;gap:12px;max-width:500px;margin:0 auto}
+.prize-col{background:#fff;border:1.5px solid var(--border2);border-radius:18px;padding:16px 13px;box-shadow:var(--shadow)}
+.prize-col-head{text-align:center;margin-bottom:12px;padding-bottom:11px;border-bottom:1px dashed var(--border2)}
+.prize-col-icon{font-size:1.9rem;margin-bottom:4px}
+.prize-col-title{font-family:'Unbounded',sans-serif;font-size:.78rem;font-weight:900;color:var(--text);margin-bottom:2px}
+.prize-col-sub{font-size:.67rem;color:var(--muted)}
+.pcol-badge{display:inline-block;border-radius:10px;padding:2px 10px;font-size:.6rem;font-weight:700;margin-top:4px}
+.badge-pin{background:#fdf5ff;color:#7b2d8b;border:1px solid #d9a8ed}
+.chip-list{display:flex;flex-direction:column;gap:7px}
+.chip{display:flex;align-items:center;gap:9px;background:var(--pk1);border:1.5px solid var(--border2);border-radius:12px;padding:10px 11px;transition:all .2s}
+.chip:hover{background:#fff;border-color:var(--pk4)}
+.chi{font-size:1.4rem;flex-shrink:0;width:28px;text-align:center}
+.chip-info{flex:1;min-width:0}
+.chn{font-weight:700;font-size:.77rem;color:var(--text);line-height:1.2}
+.chv{font-size:.63rem;color:var(--muted);margin-top:1px}
+.chip-tag{font-size:.58rem;font-weight:700;padding:2px 7px;border-radius:7px;white-space:nowrap;flex-shrink:0}
+.tag-prize{background:var(--grad);color:#fff}
+.tag-common{background:#e0e0e0;color:#555}
+.chip-prob{font-size:.58rem;font-weight:700;color:var(--muted);padding:2px 6px;border-radius:7px;background:var(--pk1);border:1px solid var(--border);white-space:nowrap;flex-shrink:0}
+.rev-preview{position:relative;z-index:1;padding:0 14px 12px}
+.rev-grid{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.rc{background:#fff;border:1.5px solid var(--border);border-radius:15px;padding:13px 12px;box-shadow:var(--shadow)}
+.rstar{color:var(--gold);font-size:.74rem;letter-spacing:1px;margin-bottom:2px}
+.rname{font-weight:700;font-size:.82rem;color:var(--text)}
+.rmeta{font-size:.64rem;color:var(--muted);margin-bottom:5px}
+.rbadge{display:inline-flex;align-items:center;gap:3px;background:var(--accent-light);border:1px solid var(--border2);border-radius:10px;padding:2px 8px;font-size:.61rem;color:var(--pk5);font-weight:700;margin-bottom:5px}
+.rtext{color:var(--text2);font-size:.78rem;line-height:1.6}
+.rev-cta{text-align:center;padding:12px 16px 40px}
+.btn-all-rev{display:inline-flex;align-items:center;gap:7px;padding:13px 26px;background:var(--grad);border:none;border-radius:24px;color:white;font-family:'Unbounded',sans-serif;font-weight:700;font-size:.75rem;text-decoration:none;box-shadow:0 5px 20px rgba(156,39,176,0.25);touch-action:manipulation}
+.btn-all-rev:active{transform:scale(.97)}
+.rev-count-badge{background:rgba(255,255,255,.25);border-radius:16px;padding:2px 8px;font-size:.65rem}
+footer{text-align:center;padding:18px 16px calc(18px + var(--safe-bottom));color:var(--muted);font-size:.68rem;border-top:1px solid var(--border)}
+footer a{color:var(--pk5);text-decoration:none}
+#springCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6}
+</style>
+</head>
+<body>
+<canvas id="springCanvas"></canvas>
+<div class="ticker-wrap"><div class="ticker" id="ticker"></div></div>
+<nav>
+  <div class="logo">🎁 secretbox <span>· ВБ</span></div>
+  <div class="nav-links">
+    <a href="index.html" class="nl active">Главная</a>
+    <a href="pinyatta.html" class="nl">Секретная коробка</a>
+    <a href="reviews.html" class="nl">Отзывы</a>
+  </div>
+</nav>
+<section class="hero">
+  <div class="logo-side">
+    <div class="box-icon">🎁</div>
+  </div>
+  <div class="hero-center">
+    <div class="badge">🎁 Уже 15 000+ участников!</div>
+    <h1>Открой <span class="gr">secret box</span><br>и попробуй выиграть главный приз</h1>
+    <p class="hero-sub">Участвуй бесплатно — открой одну из шести коробок и попробуй выиграть iPhone 17 Pro / Pro Max и другие подарки от ВБ.</p>
+  </div>
+  <div class="logo-side">
+    <div class="box-icon">📦</div>
+  </div>
+</section>
+<section class="form-sec">
+  <div class="form-card">
+    <div class="ft">🎁 Участвовать бесплатно</div>
+    <div class="fs">Заполни данные и отправляйся к коробкам</div>
+    <div id="formWrap">
+      <div class="fg"><label>Ваше имя</label><input type="text" id="fname" placeholder="Иван Иванов" autocomplete="name" inputmode="text"></div>
+      <div class="fg"><label>Страна</label>
+        <select id="fcountry"><option value="">Выберите страну</option><option>Россия</option><option>Беларусь</option><option>Казахстан</option><option>Германия</option><option>США</option><option>Другая</option></select>
+      </div>
+      <div class="fg"><label>Откуда узнали?</label>
+        <select id="fsource"><option value="">Выберите источник</option><option>TikTok</option><option>ВКонтакте</option><option>Telegram</option><option>YouTube</option><option>От друзей</option><option>Другое</option></select>
+      </div>
+      <button class="btn-sub" onclick="submitForm()">🎁 Открыть секретную коробку!</button>
+    </div>
+    <div class="succ" id="successMsg">
+      <span class="se">🎉</span>
+      <h3>Отлично, <span id="sName"></span>!</h3>
+      <p>Теперь отправляйся к коробкам и выбери свою</p>
+      <div class="choice-row">
+        <a href="pinyatta.html" class="choice-btn">
+          <span class="ci">🎁</span>К коробкам
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="prizes-sec">
+  <div class="sl">🎁 Что можно выиграть?</div>
+  <p class="ss">Каждый подарок имеет свой шанс выпадения. Удачи!</p>
+  <div class="prizes-grid">
+    <div class="prize-col">
+      <div class="prize-col-head">
+        <div class="prize-col-icon">🎁</div>
+        <div class="prize-col-title">Секретная коробка</div>
+        <div class="prize-col-sub">Открой коробку — получи случайный подарок</div>
+        <span class="pcol-badge badge-pin">🎲 Случайный подарок</span>
+      </div>
+      <div class="chip-list">
+        <div class="chip"><div class="chi">📱</div><div class="chip-info"><div class="chn">iPhone 17 Pro Max (оранжевый)</div><div class="chv">Флагман Apple</div></div><span class="chip-prob" style="color:#d32f2f;">0.00000546%</span><span class="chip-tag tag-prize" style="background:linear-gradient(135deg,#ff6f00,#ff8f00);">🔥 Джекпот</span></div>
+        <div class="chip"><div class="chi">📱</div><div class="chip-info"><div class="chn">iPhone 17 Pro</div><div class="chv">Флагман Apple</div></div><span class="chip-prob" style="color:#d32f2f;">0.00000546%</span><span class="chip-tag tag-prize" style="background:linear-gradient(135deg,#ff6f00,#ff8f00);">🔥 Джекпот</span></div>
+        <div class="chip"><div class="chi">💻</div><div class="chip-info"><div class="chn">MacBook Air M4</div><div class="chv">Мощный ноутбук</div></div><span class="chip-prob" style="color:#d32f2f;">0.00000321%</span><span class="chip-tag tag-prize" style="background:linear-gradient(135deg,#ff6f00,#ff8f00);">🔥 Супер-редкий</span></div>
+        <div class="chip"><div class="chi">⌚</div><div class="chip-info"><div class="chn">Apple Watch Ultra</div><div class="chv">Смарт-часы</div></div><span class="chip-prob" style="color:#d32f2f;">0.00000789%</span><span class="chip-tag tag-prize" style="background:linear-gradient(135deg,#ff6f00,#ff8f00);">🔥 Супер-редкий</span></div>
+        <div class="chip"><div class="chi">🎮</div><div class="chip-info"><div class="chn">PlayStation 5</div><div class="chv">Игровая консоль</div></div><span class="chip-prob" style="color:#d32f2f;">0.00000456%</span><span class="chip-tag tag-prize" style="background:linear-gradient(135deg,#ff6f00,#ff8f00);">🔥 Супер-редкий</span></div>
+        <div class="chip"><div class="chi">🎧</div><div class="chip-info"><div class="chn">AirPods Pro 2</div><div class="chv">Наушники Apple</div></div><span class="chip-prob" style="color:#d32f2f;">0.00000999%</span><span class="chip-tag tag-prize" style="background:linear-gradient(135deg,#ff6f00,#ff8f00);">🔥 Редкий</span></div>
+        <div class="chip"><div class="chi">🛍️</div><div class="chip-info"><div class="chn">ВБ купон 5 000 ₽</div><div class="chv">На Wildberries</div></div><span class="chip-prob" style="color:#d32f2f;">0.000015%</span><span class="chip-tag tag-prize" style="background:linear-gradient(135deg,#ff6f00,#ff8f00);">🔥 Редкий</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="rev-preview">
+  <div class="sl">💬 Что говорят участники</div>
+  <p class="ss">Реальные отзывы о нахождении коробок</p>
+  <div class="rev-grid" id="revGrid"></div>
+</section>
+<div class="rev-cta">
+  <a href="reviews.html" class="btn-all-rev">💬 Все отзывы <span class="rev-count-badge">30+</span></a>
+</div>
+<footer><p>© 2025 secretbox · ВБ · <a href="prize.html">Условия получения</a></p></footer>
+<script>
+const TICKER_POOL = [
+  {n:'Носки с утками',      i:'🧦', weight:225, jackpot:false},
+  {n:'Кружка «Утка ВБ»',    i:'☕', weight:200, jackpot:false},
+  {n:'Полотенце с уткой',   i:'🏖️', weight:185, jackpot:false},
+  {n:'Блокнот «Утки»',      i:'🔖', weight:160, jackpot:false},
+  {n:'Мыло ручной работы',  i:'🛁', weight:140, jackpot:false},
+  {n:'Шоппер «Утка»',       i:'🎒', weight:120, jackpot:false},
+  {n:'ВБ купон 5 000 ₽',    i:'🛍️', weight:15,  jackpot:false},
+  {n:'AirPods Pro 2',       i:'🎧', weight:10,  jackpot:false},
+  {n:'Apple Watch Ultra',   i:'⌚', weight:8,   jackpot:false},
+  {n:'PlayStation 5',       i:'🎮', weight:5,   jackpot:false},
+  {n:'MacBook Air M4',      i:'💻', weight:3,   jackpot:true,  label:'🔥 ДЖЕКПОТ!'},
+  {n:'iPhone 17 Pro Max (оранжевый)', i:'📱', weight:1,   jackpot:true,  label:'🔥 ДЖЕКПОТ!'},
+  {n:'iPhone 17 Pro',       i:'📱', weight:1,   jackpot:true,  label:'🔥 ДЖЕКПОТ!'},
+];
+const _WEIGHTED = [];
+TICKER_POOL.forEach(p => { for(let i=0; i<p.weight; i++) _WEIGHTED.push(p); });
+const _NAMES = ['Анна','Дмитрий','Ольга','Иван','Татьяна','Сергей','Наталья','Михаил','Екатерина','Андрей','Юлия','Алексей','Виктория','Светлана','Руслан','Кирилл','Мария','Роман','Полина','Артём','Ксения','Вадим','Алина','Олег','Нина'];
+function getRandomName(){ const stored = localStorage.getItem('userName'); if(stored && Math.random() < 0.3) return stored.split(' ')[0]; return _NAMES[Math.floor(Math.random() * _NAMES.length)]; }
+function getRandomPrize(){ return _WEIGHTED[Math.floor(Math.random() * _WEIGHTED.length)]; }
+function buildTickerItem(prize, name){
+  const el = document.createElement('div'); el.className = 'ti' + (prize.jackpot ? ' ti-jackpot' : '');
+  const dot = `<span class="tdot"></span>`;
+  if(prize.jackpot){ el.innerHTML = dot + `<span class="tjackpot-badge">${prize.label}</span><span class="twin">${name}</span>&nbsp;выиграл(а)&nbsp;<span class="tprize tprize-jackpot">${prize.i} ${prize.n}</span>`; }
+  else { el.innerHTML = dot + `<span class="twin">${name}</span>&nbsp;получил(а)&nbsp;<span class="tprize">${prize.i} ${prize.n}</span>`; }
+  return el;
+}
+function initTicker(){
+  const tk = document.getElementById('ticker'); if(!tk) return;
+  const items = []; for(let i=0; i<60; i++){ const p=getRandomPrize(); const n=getRandomName(); items.push(buildTickerItem(p,n)); }
+  [...items,...items].forEach(el => tk.appendChild(el));
+  setInterval(() => { const p=getRandomPrize(); const n=getRandomName(); const el=buildTickerItem(p,n); const mid=Math.floor(tk.children.length/2); tk.insertBefore(el, tk.children[mid]); while(tk.children.length > 120) tk.removeChild(tk.lastChild); }, 4000 + Math.random()*2000);
+}
+initTicker();
+function submitForm(){
+  const name = document.getElementById('fname').value.trim();
+  const country = document.getElementById('fcountry').value;
+  const source = document.getElementById('fsource').value;
+  if(!name || !country || !source){ if(!name) document.getElementById('fname').style.borderColor = 'rgba(120,30,180,.5)'; if(!country) document.getElementById('fcountry').style.borderColor = 'rgba(120,30,180,.5)'; if(!source) document.getElementById('fsource').style.borderColor = 'rgba(120,30,180,.5)'; return; }
+  localStorage.setItem('userName', name); localStorage.setItem('userCountry', country);
+  document.getElementById('formWrap').style.display = 'none'; document.getElementById('successMsg').style.display = 'block'; document.getElementById('sName').textContent = name.split(' ')[0];
+}
+const DUCK_REVIEWS = [
+  {name:"Дмитрий Новиков", city:"СПб", ago:"4 дня назад", badge:"🎁 Коробка — iPhone 17 Pro Max (оранжевый)", text:"Нашёл секретную коробку! Менеджер связался быстро, телефон уже у меня!"},
+  {name:"Михаил Захаров", city:"Екб", ago:"5 дней назад", badge:"🛍️ Коробка — ВБ купон 5000 ₽", text:"Нашёл коробку и получил купон на 5000 — потратил сразу!"},
+  {name:"Алина Смирнова", city:"Москва", ago:"3 дня назад", badge:"🎧 Коробка — AirPods Pro 2", text:"Выиграла наушники! Всё честно, спасибо за акцию 🔥"},
+  {name:"Игорь Морозов", city:"Казань", ago:"1 неделю назад", badge:"🎮 Коробка — PlayStation 5", text:"До последнего не верил, но PS5 реально привезли! Огромное спасибо!"}
+];
+const grid = document.getElementById('revGrid');
+DUCK_REVIEWS.forEach(r => { const div = document.createElement('div'); div.className='rc'; div.innerHTML = `<div class="rstar">★★★★★</div><div class="rname">${r.name}</div><div class="rmeta">${r.city} · ${r.ago}</div><div class="rbadge">${r.badge}</div><p class="rtext">${r.text}</p>`; grid.appendChild(div); });
+(function(){const C=document.getElementById('springCanvas');if(!C)return;const ctx=C.getContext('2d');let W,H;function resize(){W=C.width=window.innerWidth;H=C.height=window.innerHeight;}resize();window.addEventListener('resize',resize);const PC=['#d9a8ed','#f0d9f7','#fdf5ff','#ffcce0','#ffa0c8'];const petals=Array.from({length:18},()=>({x:Math.random()*W,y:-Math.random()*H,r:2.5+Math.random()*3.5,sy:.35+Math.random()*.6,sx:(Math.random()-.5)*.3,rot:Math.random()*360,rs:(Math.random()-.5)*1.8,color:PC[Math.floor(Math.random()*PC.length)],op:.28+Math.random()*.35,w:Math.random()*Math.PI*2,ws:.4+Math.random()*.5}));let t=0;function frame(){ctx.clearRect(0,0,W,H);t+=.016;petals.forEach(p=>{p.y+=p.sy;p.x+=Math.sin(t*p.ws+p.w)*.4+p.sx;p.rot+=p.rs;if(p.y>H+20){p.y=-20;p.x=Math.random()*W;}ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);ctx.globalAlpha=p.op;ctx.fillStyle=p.color;ctx.beginPath();ctx.ellipse(0,0,p.r*.6,p.r*1.5,0,0,Math.PI*2);ctx.fill();ctx.restore();});requestAnimationFrame(frame);}frame();})();
+</script>
+</body>
+</html>

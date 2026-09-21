@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="theme-color" content="#7b2d8b">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>💬 secretbox · Чат с менеджером — ВБ</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+:root{
+  --pk1:#fdf5ff;--pk2:#f0d9f7;--pk3:#d9a8ed;--pk4:#9c27b0;--pk5:#7b2d8b;--pk6:#5a1e6e;
+  --accent:#9c27b0;--accent-light:#fdf5ff;--gold:#e8a820;
+  --bg:#faf5fc;--text:#1a0a2e;--text2:#3d1060;--muted:#8a5a9e;
+  --border:rgba(156,39,176,0.15);--border2:rgba(156,39,176,0.28);
+  --grad:linear-gradient(135deg,#9c27b0 0%,#7b2d8b 100%);
+}
+html,body{height:100%;overflow-x:hidden}
+body{-webkit-font-smoothing:antialiased;font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:-webkit-fill-available;display:flex;flex-direction:column}
+#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6}
+.chat-header{background:var(--grad);padding:10px 12px;color:#fff;display:flex;align-items:center;gap:11px;box-shadow:0 4px 18px rgba(123,45,139,.35);position:sticky;top:0;z-index:10;flex-shrink:0}
+.back-btn{background:rgba(255,255,255,.18);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.avatar-wrap{position:relative;flex-shrink:0}
+.avatar{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-size:1.5rem}
+.online-dot{position:absolute;bottom:2px;right:2px;width:11px;height:11px;background:#4ade80;border-radius:50%;border:2px solid var(--pk5)}
+.h-info{flex:1;min-width:0}
+.h-top{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.logo-wb{background:rgba(255,255,255,.22);color:#fff;font-family:'Unbounded',sans-serif;font-weight:900;font-size:.6rem;padding:2px 6px;border-radius:5px;border:1px solid rgba(255,255,255,.28)}
+.h-name{font-family:'Unbounded',sans-serif;font-weight:700;font-size:.86rem}
+.h-status{font-size:.65rem;opacity:.85}
+.h-typing{font-size:.65rem;color:#b9f6ca;display:none;margin-top:1px}
+.h-typing.show{display:block}
+.area{flex:1;padding:14px 12px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-bottom:82px;position:relative;z-index:1;-webkit-overflow-scrolling:touch}
+.msg{display:flex;flex-direction:column;max-width:86%}
+.msg.mgr{align-self:flex-start;align-items:flex-start}
+.msg.usr{align-self:flex-end;align-items:flex-end}
+.sender{font-size:.65rem;color:var(--muted);margin-bottom:3px;padding:0 4px;font-weight:600}
+.bub{padding:8px 10px;font-size:.86rem;line-height:1.57;border-radius:18px;word-break:break-word}
+.msg.mgr .bub{background:rgba(255,255,255,.97);color:var(--text);border-radius:4px 18px 18px 18px;border:1.5px solid var(--border2);box-shadow:0 2px 12px rgba(156,39,176,.08)}
+.msg.usr .bub{background:var(--grad);color:#fff;border-radius:18px 18px 4px 18px;box-shadow:0 3px 14px rgba(156,39,176,.3)}
+.mtime{font-size:.6rem;color:var(--muted);margin-top:3px;padding:0 4px}
+.sys-msg{text-align:center;font-size:.66rem;color:var(--muted);padding:3px 0;user-select:none}
+.typing-wrap{align-self:flex-start}
+.typing-ind{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.97);padding:11px 15px;border-radius:4px 18px 18px 18px;border:1.5px solid var(--border2);width:fit-content;box-shadow:0 2px 10px rgba(156,39,176,.07)}
+.td{width:7px;height:7px;border-radius:50%;background:var(--pk4);animation:tb 1.2s ease-in-out infinite}
+.td:nth-child(2){animation-delay:.2s}.td:nth-child(3){animation-delay:.4s}
+@keyframes tb{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px;padding:0 2px}
+.chip{padding:8px 15px;border-radius:22px;border:1.5px solid var(--border2);background:rgba(255,255,255,.95);font-size:.77rem;font-weight:700;color:var(--pk5);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .17s;box-shadow:0 2px 7px rgba(156,39,176,.08)}
+.chip:hover{background:var(--pk2);border-color:var(--pk4)}
+.chip:active{transform:scale(.94)}
+.prize-card{background:#fff;border:2px solid var(--pk4);border-radius:18px;padding:15px 14px;margin-top:6px;box-shadow:0 4px 22px rgba(156,39,176,.16)}
+.pc-head{display:flex;align-items:center;gap:11px;margin-bottom:13px}
+.pc-icon{font-size:2.4rem;flex-shrink:0;filter:drop-shadow(0 2px 6px rgba(156,39,176,.25))}
+.pc-info{}
+.pc-name{font-family:'Unbounded',sans-serif;font-size:.88rem;font-weight:900;color:var(--text);margin-bottom:3px}
+.pc-price{font-size:.72rem;color:var(--muted)}
+.pc-price s{opacity:.6}
+.pc-price b{color:#16a34a;font-family:'Unbounded',sans-serif}
+.go-btn{display:block;width:100%;background:var(--grad);border:none;color:#fff;padding:14px;border-radius:12px;font-size:.88rem;font-weight:700;font-family:'Unbounded',sans-serif;cursor:pointer;text-decoration:none;text-align:center;box-shadow:0 5px 18px rgba(156,39,176,.32);touch-action:manipulation;transition:transform .15s}
+.go-btn:active{transform:scale(.97)}
+.rev-btn{background:linear-gradient(135deg,#6b7280,#374151);box-shadow:0 4px 12px rgba(55,65,81,.3);margin-bottom:8px}
+.revs-block{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+.rev-card{background:#fff;border:1.5px solid var(--border2);border-radius:14px;padding:13px 13px;position:relative;overflow:hidden;box-shadow:0 2px 10px rgba(156,39,176,.07)}
+.rev-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2.5px;background:var(--grad)}
+.rv-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.rv-name{font-weight:800;font-size:.8rem;color:var(--text)}
+.rv-city{font-size:.64rem;color:var(--muted)}
+.rv-stars{color:var(--gold);font-size:.74rem;letter-spacing:1px;margin-bottom:5px}
+.rv-badge{display:inline-flex;align-items:center;gap:4px;background:var(--pk1);border:1px solid var(--border2);border-radius:10px;padding:2px 9px;font-size:.64rem;color:var(--pk5);font-weight:700;margin-bottom:6px}
+.rv-text{font-size:.79rem;color:var(--text2);line-height:1.55}
+.input-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(250,245,252,.97);border-top:1.5px solid var(--border2);padding:8px 10px;padding-bottom:max(8px,env(safe-area-inset-bottom));display:flex;align-items:center;gap:8px;backdrop-filter:blur(18px);z-index:10;box-shadow:0 -4px 18px rgba(0,0,0,.07)}
+.input-bar input{flex:1;padding:11px 16px;background:#fff;border:1.5px solid var(--border2);border-radius:28px;font-size:16px;font-family:'Nunito',sans-serif;color:var(--text);outline:none;transition:border .2s,box-shadow .2s}
+.input-bar input:focus{border-color:var(--pk4);box-shadow:0 0 0 3px rgba(156,39,176,.1)}
+.input-bar input::placeholder{color:var(--muted);opacity:.5}
+.send-btn{background:var(--grad);border:none;width:46px;height:46px;border-radius:50%;color:#fff;font-size:1.05rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 13px rgba(156,39,176,.32);transition:transform .15s}
+.send-btn:active{transform:scale(.9)}
+@media(max-width:600px){.bub{font-size:.85rem;padding:10px 12px}.chip{font-size:.75rem;padding:7px 12px}.h-name{font-size:.84rem}.send-btn{width:42px;height:42px}.input-bar input{padding:10px 14px;font-size:15px}}
+@media(max-width:390px){.bub{font-size:.8rem;padding:9px 11px}.h-name{font-size:.76rem}.chip{font-size:.7rem;padding:6px 10px}.send-btn{width:40px;height:40px}.input-bar{gap:6px}.prize-card{padding:13px 11px}.pc-name{font-size:.82rem}.go-btn{font-size:.82rem;padding:12px}}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="chat-header">
+  <button class="back-btn" onclick="history.back()">←</button>
+  <div class="avatar-wrap">
+    <div class="avatar" id="mgAvatar">👩‍💼</div>
+    <div class="online-dot"></div>
+  </div>
+  <div class="h-info">
+    <div class="h-top"><span class="logo-wb">ВБ</span><span class="h-name" id="mgName">secretbox</span></div>
+    <div class="h-status">🟢 Онлайн · менеджер акции</div>
+    <div class="h-typing" id="hTyping">печатает...</div>
+  </div>
+</div>
+<div class="area" id="area">
+  <div class="sys-msg">🔒 Защищённый чат · secretbox 🦆</div>
+</div>
+<div class="input-bar">
+  <input type="text" id="inp" placeholder="Напишите сообщение..." autocomplete="off" maxlength="200">
+  <button class="send-btn" id="sendBtn">➤</button>
+</div>
+<script>
+const _AC = (()=>{ let ac = null; return ()=>{ if(!ac) ac = new(window.AudioContext||window.webkitAudioContext)(); return ac; }; })();
+function soundMgr(){ try{ const ac=_AC(); const osc=ac.createOscillator(); const gain=ac.createGain(); const filter=ac.createBiquadFilter(); filter.type='lowpass'; filter.frequency.value=1200; osc.connect(filter); filter.connect(gain); gain.connect(ac.destination); osc.type='sine'; osc.frequency.setValueAtTime(880, ac.currentTime); osc.frequency.exponentialRampToValueAtTime(660, ac.currentTime+.12); gain.gain.setValueAtTime(0, ac.currentTime); gain.gain.linearRampToValueAtTime(.18, ac.currentTime+.01); gain.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime+.28); osc.start(ac.currentTime); osc.stop(ac.currentTime+.3); const o2=ac.createOscillator(), g2=ac.createGain(); o2.connect(g2); g2.connect(ac.destination); o2.type='sine'; o2.frequency.value=1320; g2.gain.setValueAtTime(0, ac.currentTime); g2.gain.linearRampToValueAtTime(.07, ac.currentTime+.005); g2.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime+.12); o2.start(ac.currentTime); o2.stop(ac.currentTime+.13); }catch(e){} }
+function soundUser(){ try{ const ac=_AC(); const osc=ac.createOscillator(); const gain=ac.createGain(); osc.connect(gain); gain.connect(ac.destination); osc.type='sine'; osc.frequency.setValueAtTime(440, ac.currentTime); osc.frequency.exponentialRampToValueAtTime(660, ac.currentTime+.08); gain.gain.setValueAtTime(0, ac.currentTime); gain.gain.linearRampToValueAtTime(.13, ac.currentTime+.005); gain.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime+.18); osc.start(ac.currentTime); osc.stop(ac.currentTime+.2); }catch(e){} }
+function soundChip(){ try{ const ac=_AC(); const osc=ac.createOscillator(), gain=ac.createGain(); osc.connect(gain); gain.connect(ac.destination); osc.type='sine'; osc.frequency.value=520; gain.gain.setValueAtTime(0, ac.currentTime); gain.gain.linearRampToValueAtTime(.1, ac.currentTime+.004); gain.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime+.1); osc.start(ac.currentTime); osc.stop(ac.currentTime+.11); }catch(e){} }
+let _audioUnlocked = false;
+function _unlockAudio(){ if(_audioUnlocked) return; _audioUnlocked = true; try{ const ac=_AC(); if(ac.state==='suspended') ac.resume(); }catch(e){} }
+document.addEventListener('touchstart', _unlockAudio, {once:true, passive:true}); document.addEventListener('click', _unlockAudio, {once:true, passive:true});
+const PRIZE      = localStorage.getItem('prize') || 'iPhone 17 Pro Max (оранжевый)';
+const PRIZE_ICON = localStorage.getItem('prizeIcon') || '📱';
+const PRICES     = {'iPhone 17 Pro Max (оранжевый)':'129 990 ₽','MacBook Air M4':'149 990 ₽','AirPods Pro 2':'21 990 ₽','ВБ купон 5 000 ₽':'5 000 ₽'};
+const PRIZE_PRICE = PRICES[PRIZE] || '129 990 ₽';
+const MGRS = [{name:'Анна',av:'👩‍💼'},{name:'Елена',av:'👩‍🎨'},{name:'Мария',av:'👩‍⚕️'},{name:'Дмитрий',av:'👨‍💼'},{name:'Алексей',av:'🧑‍💻'},{name:'Ольга',av:'👩‍🏫'}];
+const MGR = MGRS[Math.floor(Math.random()*MGRS.length)];
+document.getElementById('mgAvatar').textContent = MGR.av;
+document.getElementById('mgName').textContent   = MGR.name;
+const ALL_REVS = [
+  {name:'Дмитрий К.',city:'Москва',prize:'📱 iPhone 17 Pro Max (оранжевый)',stars:'★★★★★',text:'Не верил — но открыл коробку и выиграл iPhone 17 Pro Max! Пришёл на следующий день. Менеджер написал через 10 минут. Акция честная! 🔥'},
+  {name:'Алина С.',city:'СПб',prize:'💻 MacBook Air M4',stars:'★★★★★',text:'Подруга уговорила попробовать — и не зря! MacBook настоящий. Менеджер всё объяснил, никаких лишних вопросов. Работаю на нём каждый день 😊'},
+  {name:'Максим Р.',city:'Екб',prize:'📱 iPhone 17 Pro Max (оранжевый)',stars:'★★★★★',text:'Обычно скептически отношусь к таким акциям. Но это реально! iPhone получил, проверил в Apple Store — оригинал. Оплатил только 1₽ доставки. Всем советую! 💜'},
+];
+const usedRevs = new Set();
+function getTwoRevs() { let pool = ALL_REVS.filter((_,i)=>!usedRevs.has(i)).map((_,i)=>i); if(pool.length < 2){ usedRevs.clear(); pool = ALL_REVS.map((_,i)=>i); } const picked = []; while(picked.length < 2){ const idx = pool[Math.floor(Math.random()*pool.length)]; if(!picked.includes(idx)){ picked.push(idx); usedRevs.add(idx); } } return picked.map(i=>ALL_REVS[i]); }
+const area = document.getElementById('area'); const hTyping = document.getElementById('hTyping');
+function scroll(){ area.scrollTop = area.scrollHeight; }
+function now(){ const d=new Date(); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+let typingEl = null;
+function showTyping(){ if(typingEl) return; typingEl = document.createElement('div'); typingEl.className = 'typing-wrap'; typingEl.innerHTML = '<div class="typing-ind"><div class="td"></div><div class="td"></div><div class="td"></div></div>'; area.appendChild(typingEl); hTyping.classList.add('show'); scroll(); }
+function hideTyping(){ if(typingEl){ typingEl.remove(); typingEl=null; } hTyping.classList.remove('show'); }
+function addMgr(html, extra=null){ soundMgr(); const w=document.createElement('div'); w.className='msg mgr'; w.innerHTML=`<div class="sender">${MGR.name} · ВБ</div>`; const b=document.createElement('div'); b.className='bub'; b.innerHTML=html; w.appendChild(b); if(extra) w.appendChild(extra); const t=document.createElement('div'); t.className='mtime'; t.textContent=now(); w.appendChild(t); area.appendChild(w); scroll(); }
+function addUser(text){ soundUser(); const w=document.createElement('div'); w.className='msg usr'; const b=document.createElement('div'); b.className='bub'; b.textContent=text; w.appendChild(b); const t=document.createElement('div'); t.className='mtime'; t.textContent=now(); w.appendChild(t); area.appendChild(w); scroll(); }
+function addSys(text){ const d=document.createElement('div'); d.className='sys-msg'; d.textContent=text; area.appendChild(d); scroll(); }
+let chipsEl=null;
+function showChips(opts, cb){ removeChips(); chipsEl=document.createElement('div'); chipsEl.className='chips'; opts.forEach(o=>{ const btn=document.createElement('button'); btn.className='chip'; btn.textContent=o; btn.onclick=()=>{ soundChip(); removeChips(); addUser(o); cb(o); }; chipsEl.appendChild(btn); }); area.appendChild(chipsEl); scroll(); }
+function removeChips(){ if(chipsEl){chipsEl.remove();chipsEl=null;} }
+function buildWaitCard(){ const card=document.createElement('div'); card.className='prize-card'; card.style.cssText='border-color:var(--pk3);background:var(--pk1)'; const timerBlock=document.createElement('div'); timerBlock.style.cssText='text-align:center;padding:8px 0 14px'; const timerLabel=document.createElement('div'); timerLabel.style.cssText='font-size:.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px'; timerLabel.textContent='⏳ Менеджер ответит через'; const timerDisplay=document.createElement('div'); timerDisplay.style.cssText='font-family:Unbounded,sans-serif;font-size:1.9rem;font-weight:900;color:var(--pk5);letter-spacing:.04em;line-height:1'; timerDisplay.id='waitTimerDisplay'; timerDisplay.textContent='30:00'; const timerSub=document.createElement('div'); timerSub.style.cssText='font-size:.67rem;color:var(--muted);margin-top:5px'; timerSub.innerHTML='Из-за огромного наплыва участников Утиного озера<br>живые специалисты временно заняты 🦆'; timerBlock.appendChild(timerLabel); timerBlock.appendChild(timerDisplay); timerBlock.appendChild(timerSub); card.appendChild(timerBlock); const div=document.createElement('div'); div.style.cssText='border-top:1px dashed var(--border2);margin-bottom:12px'; card.appendChild(div); const gb=document.createElement('a'); gb.href='prize.html';gb.className='go-btn'; gb.textContent='🎁 Не ждать — забрать подарок сейчас →'; card.appendChild(gb); let secs=30*60; const tick=setInterval(()=>{ secs--; if(secs<=0){clearInterval(tick);timerDisplay.textContent='00:00';return;} const m=Math.floor(secs/60),s=secs%60; timerDisplay.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'); },1000); return card; }
+function buildPrizeCard(withRevBtn=true){ const card=document.createElement('div'); card.className='prize-card'; card.innerHTML=`<div class="pc-head"><div class="pc-icon">${PRIZE_ICON}</div><div class="pc-info"><div class="pc-name">${PRIZE}</div><div class="pc-price"><s>${PRIZE_PRICE}</s> → <b>1 ₽</b></div></div></div>`; if(withRevBtn){ const rb=document.createElement('button'); rb.className='go-btn rev-btn'; rb.textContent='💬 Посмотреть отзывы'; rb.onclick=()=>{ rb.disabled=true; rb.style.opacity='.45'; doShowRevs(); }; card.appendChild(rb); } const gb=document.createElement('a'); gb.href='prize.html'; gb.className='go-btn'; gb.textContent='🎁 Забрать подарок →'; card.appendChild(gb); return card; }
+function buildRevsBlock(revs){ const wrap=document.createElement('div'); wrap.className='revs-block'; revs.forEach(r=>{ const d=document.createElement('div'); d.className='rev-card'; d.innerHTML=`<div class="rv-top"><span class="rv-name">${r.name}</span><span class="rv-city">${r.city}</span></div><div class="rv-stars">${r.stars}</div><div class="rv-badge">${r.prize}</div><div class="rv-text">${r.text}</div>`; wrap.appendChild(d); }); return wrap; }
+let locked=false; let revCount=0; let chipUsed=false; let waitTimerShown=false;
+const D={ fast:()=>1100+Math.random()*500, med:()=>1900+Math.random()*700, slow:()=>2700+Math.random()*800 };
+function say(html, delay, extra=null, afterFn=null){ locked=true; showTyping(); setTimeout(()=>{ hideTyping(); addMgr(html, extra); locked=false; if(afterFn) afterFn(); scroll(); }, delay); }
+function doShowRevs(){ if(locked) return; revCount++; const revs=getTwoRevs(); const intro = revCount===1 ? 'Вот реальные отзывы наших победителей 👇' : 'Ещё несколько отзывов победителей 🦆'; locked=true; showTyping(); setTimeout(()=>{ hideTyping(); addMgr(intro, buildRevsBlock(revs)); locked=false; scroll(); setTimeout(()=>{ say(`Убедились? 😊 Тысячи победителей уже получили свои призы — и ваш <b>${PRIZE_ICON} ${PRIZE}</b> тоже ждёт! Нажмите кнопку ниже 👇`, D.med(), buildPrizeCard(false)); }, 1000); }, D.slow()); }
+function has(t, words){ return words.some(w=>t.includes(w)); }
+const FALLBACKS=[`Ваш <b>${PRIZE_ICON} ${PRIZE}</b> уже ждёт! 🎁 Нажмите кнопку «Забрать подарок» — там вся инструкция.`,`ВБ гарантирует честность акции 🦆 Просто нажмите кнопку выше и оформите получение!`,`Не упустите свой шанс! 🎁 ${PRIZE_ICON} ${PRIZE} зарезервирован именно для вас.`,`Рада помочь! Если что-то непонятно — я здесь 😊 А приз ждёт — нажимайте на кнопку!`];
+let fbIdx=0;
+function handleChip(text){ chipUsed=true; handle(text); }
+function handle(text){ if(locked) return; const t=text.toLowerCase().trim(); if(has(t,['отзыв','покажи','доказательства','реальн','обман','развод','не верю','честно','правда','примеры'])){ doShowRevs(); return; } if(has(t,['да','готов','хочу','давай','конечно','ага','угу','ок','ok','yes','беру','забираю','оформляй','поехали','забрать'])){ say(`Отлично! 🎉 Нажмите кнопку «Забрать подарок» ниже — там вся инструкция по получению вашего <b>${PRIZE_ICON} ${PRIZE}</b>!`, D.fast(), buildPrizeCard(false)); return; } if(has(t,['реально','это реально','серьёзно','правда','шутка','розыгрыш','ненастоящий'])){ say(`Абсолютно реально! 🦆 Акция «Секретная коробка» проводится ВБ ежегодно. Тысячи людей уже получили призы — убедитесь сами!`, D.med(), null, ()=>{ setTimeout(()=>showChips(['💬 Показать отзывы','🎁 Забрать подарок!'], handleChip), 400); }); return; } if(has(t,['как','инструкция','что делать','объясни','расскажи','шаги','порядок'])){ say(`Всё очень просто! 🦆<br><br>1️⃣ Нажмите кнопку <b>«Забрать подарок»</b><br>2️⃣ Заполните короткую форму<br>3️⃣ Получите ваш <b>${PRIZE}</b>!<br><br>Займёт не больше 2 минут 😊`, D.med(), null, ()=>{ setTimeout(()=>showChips(['🎁 Забрать подарок!','💬 Посмотреть отзывы'], handleChip), 400); }); return; } if(has(t,['сколько','стоит','платить','деньги','цена','бесплатно','1 рубл','рубл'])){ say(`<b>${PRIZE}</b> достаётся вам бесплатно — это подарок от ВБ в честь акции «Секретная коробка»! 🎁 Нажмите кнопку и заберите его!`, D.fast(), null, ()=>{ setTimeout(()=>showChips(['🎁 Забрать подарок!'], handleChip), 400); }); return; } if(has(t,['спасибо','благодарю','класс','круто','огонь','супер','отличн','👍'])){ say(`Пожалуйста! Рады видеть вас победителем акции «Секретная коробка» от ВБ 🦆 Осталось только нажать кнопку — и <b>${PRIZE}</b> ваш!`, D.fast(), null, ()=>{ setTimeout(()=>showChips(['🎁 Забрать подарок!'], handleChip), 400); }); return; } if(has(t,['нет','не хочу','откажусь','не буду','позже','потом','не надо'])){ say(`Ой, как жаль! 😔 <b>${PRIZE_ICON} ${PRIZE}</b> зарезервирован именно для вас — это не случайно! Предложение ограничено по времени 🕐`, D.med(), null, ()=>{ setTimeout(()=>showChips(['🤔 Всё-таки возьму!','💬 Покажи отзывы'], handleChip), 400); }); return; } const fb=FALLBACKS[fbIdx%FALLBACKS.length]; fbIdx++; say(fb, D.med(), null, ()=>{ setTimeout(()=>showChips(['🎁 Забрать подарок!','💬 Посмотреть отзывы'], handleChip), 400); }); }
+setTimeout(()=>{ const firstMsg=`Привет! 👋 Меня зовут ${MGR.name}, я менеджер акции «Секретная коробка» от ВБ.<br><br>Поздравляю — вы открыли секретную коробку и выиграли <b>${PRIZE_ICON} ${PRIZE}</b>! 🥳<br><br>В магазине этот товар стоит ${PRIZE_PRICE} — но поскольку вы выиграли в акции, ваша цена теперь всего <b>1 ₽</b>! Готовы забрать?`; say(firstMsg, D.slow(), null, ()=>{ setTimeout(()=>{ showChips(['✅ Да, забираю!','💬 Посмотреть отзывы','❓ Это реально?'], handleChip); }, 400); }); }, 800);
+function send(){ const el=document.getElementById('inp'); const text=el.value.trim(); if(!text||locked) return; el.value=''; removeChips(); addUser(text); if(chipUsed && !waitTimerShown){ waitTimerShown=true; const WAIT_MSGS=['Ваш запрос принят! Сейчас соединяю вас с реальным специалистом ВБ 👨‍💼','Один момент — передаю ваш вопрос живому менеджеру 🦆','Сейчас подключу специалиста, который поможет вам забрать приз! 😊']; const msg=WAIT_MSGS[Math.floor(Math.random()*WAIT_MSGS.length)]; say(msg, D.med(), buildWaitCard()); return; } if(chipUsed && waitTimerShown){ const REMIND=['Специалист скоро ответит ⏳ А пока — нажмите кнопку ниже и заберите приз прямо сейчас!','Ждём специалиста 🦆 Вы можете не ждать и сразу забрать свой <b>'+PRIZE+'</b> по кнопке выше!','Ещё немного терпения 😊 Или нажмите «Забрать подарок» — это займёт 1 минуту!']; say(REMIND[Math.floor(Math.random()*REMIND.length)], D.fast()); return; } handle(text); }
+document.getElementById('sendBtn').onclick=send; document.getElementById('inp').addEventListener('keypress',e=>{ if(e.key==='Enter') send(); });
+function vibrateWin(isJackpot){if(!navigator.vibrate)return;navigator.vibrate(isJackpot?[200,100,200,100,400]:[100,80,100]);}
+(function(){ const C=document.getElementById('bgCanvas'); if(!C) return; const ctx=C.getContext('2d'); let W,H; function resize(){W=C.width=window.innerWidth;H=C.height=window.innerHeight;} resize(); window.addEventListener('resize',()=>{resize();buildH();}); const hexes=[]; function buildH(){ hexes.length=0; const R=34; for(let row=-1;row<Math.ceil(H/(R*1.5))+2;row++) for(let col=-1;col<Math.ceil(W/(R*1.73))+2;col++) hexes.push({x:col*(R*1.73)+(row%2)*R*.865,y:row*(R*1.5),ph:Math.random()*Math.PI*2,sp:.003+Math.random()*.006}); } buildH(); function hexPath(x,y,r){ ctx.beginPath(); for(let i=0;i<6;i++){const a=Math.PI/3*i-Math.PI/6;i===0?ctx.moveTo(x+r*Math.cos(a),y+r*Math.sin(a)):ctx.lineTo(x+r*Math.cos(a),y+r*Math.sin(a));} ctx.closePath(); } const BEES=Array.from({length:8},()=>({ x:Math.random()*1400, y:40+Math.random()*700, vx:(Math.random()>.5?1:-1)*(0.35+Math.random()*0.55), vy:(Math.random()-.5)*0.28, phase:Math.random()*Math.PI*2, size:13+Math.random()*9, op:0.06+Math.random()*0.07, wp:Math.random()*Math.PI*2, })); function drawBee(b,t){ const s=b.size, flip=b.vx<0?-1:1; const x=b.x, y=b.y+Math.sin(t*1.2+b.phase)*11; ctx.save(); ctx.globalAlpha=b.op; ctx.translate(x,y); ctx.scale(flip,1); ctx.beginPath(); ctx.ellipse(0,0,s*.54,s*.73,0,0,Math.PI*2); ctx.fillStyle='#f5a623'; ctx.fill(); for(let i=-1;i<=1;i++){ ctx.fillStyle='#1a0a00'; ctx.globalAlpha=b.op*.68; ctx.beginPath(); ctx.ellipse(0,i*s*.25,s*.54,s*.11,0,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=b.op; } ctx.beginPath(); ctx.arc(0,-s*.77,s*.34,0,Math.PI*2); ctx.fillStyle='#e8830a'; ctx.fill(); const wa=Math.abs(Math.sin(t*8+b.wp))*.32+.14; ctx.globalAlpha=wa*b.op*2.6; ctx.fillStyle='rgba(200,235,255,0.82)'; ctx.beginPath(); ctx.ellipse(-s*.68,-s*.3,s*.52,s*.24,-.38,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.ellipse(s*.68,-s*.3,s*.52,s*.24,.38,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=b.op*1.6; ctx.fillStyle='#fff'; ctx.font=`bold ${Math.round(s*.44)}px Unbounded,sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('ВБ',0,s*.04); ctx.restore(); } let t=0; function frame(){ ctx.clearRect(0,0,W,H); t+=.012; hexes.forEach(h=>{ const a=.010+.006*Math.abs(Math.sin(t*h.sp+h.ph)); ctx.save(); ctx.globalAlpha=a; ctx.strokeStyle='#9c27b0'; ctx.lineWidth=.65; hexPath(h.x,h.y,34); ctx.stroke(); ctx.restore(); }); BEES.forEach(b=>{ b.x+=b.vx; b.y+=b.vy; b.vy+=Math.sin(t*.8+b.phase)*.013; b.vy*=.98; if(b.x<-60) b.x=W+60; if(b.x>W+60) b.x=-60; if(b.y<20){b.y=20;b.vy*=-1;} if(b.y>H-20){b.y=H-20;b.vy*=-1;} drawBee(b,t); }); ctx.globalAlpha=1; requestAnimationFrame(frame); } frame(); })();
+</script>
+</body>
+</html>
